@@ -1,0 +1,864 @@
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600&family=Hedvig+Letters+Serif:opsz@12..24&family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@400;700&display=swap');
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	font-family: 'Hedvig';
+}
+
+::-webkit-scrollbar {
+	width: 0.5em;
+}
+
+::-webkit-scrollbar-track {
+	background-color: white;
+	border-top-right-radius: 0.4em;
+	border-bottom-right-radius: 0.4em;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: #7f7f7f;
+	border-top-right-radius: 0.3em;
+	border-bottom-right-radius: 0.3em;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background-color: #3f3f3f;
+}
+
+:root {
+	--white: #fffef5;
+	--transparent-white: #fffef580;
+	--transparent-white2: #fffef5f0;
+	--light-blue: #72b7bd;
+	--dark-blue: #2ca1a3;
+	--pale-blue: #b6e5ff;
+	--dark-red: #c70000;
+	--light-red: #ff2d2d;
+	--dark-orange: #d8811f;
+	--light-orange: #e49d57;
+	--green: #45cf32;
+}
+
+body {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
+	width: 100vw;
+	background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+		url(https://images.unsplash.com/photo-1620503374956-c942862f0372?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)
+			no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.logo {
+	position: fixed;
+	top: 0;
+	left: 0;
+	margin: 1em;
+	font-family: 'Montserrat';
+	font-weight: bold;
+	text-transform: lowercase;
+	color: var(--white);
+	font-size: 18px;
+	letter-spacing: 0.14em;
+	align-self: start;
+	justify-content: start;
+}
+
+.hero {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.hero-main-text {
+	margin: 1em 0;
+	text-transform: uppercase;
+	font-size: 25px;
+	letter-spacing: 0.19em;
+	color: var(--white);
+}
+
+.hero-text-content {
+	margin: 0 0 2em 0;
+	font-size: 20px;
+	color: var(--white);
+	letter-spacing: 0.1em;
+}
+
+.btn {
+	font-family: 'Montserrat';
+	font-size: 15px;
+	font-weight: bold;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	cursor: pointer;
+	background-color: var(--dark-blue);
+	padding: 1em 1.5em;
+	border: solid 2px var(--light-blue);
+	border-radius: 0.2em;
+	color: var(--white);
+	transition: background-color ease 0.3s;
+}
+
+.btn:hover {
+	background-color: transparent;
+	color: var(--light-blue);
+	transition: background-color ease 0.3s;
+}
+
+@media (max-width: 612px) {
+	.hero-main-text {
+		text-align: center;
+	}
+}
+
+@media (max-width: 520px) {
+	.hero-main-text {
+		font-size: 23px;
+	}
+	.hero-text-content {
+		font-size: 18px;
+	}
+}
+
+/* login/register form */
+
+.card {
+	min-width: 22vw;
+	height: auto;
+	background-color: var(--white);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+	border: solid 1px rgba(0, 0, 0, 0.18);
+	border-radius: 0.4em;
+
+	display: flex;
+	flex-direction: column;
+	padding: 2em 2.4em;
+}
+
+.form-logo {
+	justify-self: start;
+	align-self: center;
+	font-family: 'Montserrat';
+	font-weight: bold;
+	text-transform: lowercase;
+	color: var(--dark-blue);
+	font-size: 15px;
+	letter-spacing: 0.14em;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.form-header {
+	font-size: 25px;
+	font-weight: bold;
+	margin: 0.8em 0;
+}
+
+.inputContainer {
+	margin-bottom: 2em;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	border-bottom: solid 2px var(--light-blue);
+}
+
+.inputContainer:focus-within {
+	border-bottom-color: var(--dark-blue);
+}
+
+.inputContainer i {
+	color: var(--dark-blue);
+}
+
+input,
+textarea {
+	background-color: transparent;
+	border: none;
+	width: 100%;
+	height: 100%;
+	padding: 0.5em 1em;
+	font-family: 'Montserrat';
+	font-size: 16px;
+}
+
+input:focus,
+textarea:focus {
+	outline: none;
+}
+
+input::placeholder,
+textarea::placeholder {
+	color: black;
+	font-size: 16px;
+	font-family: 'Montserrat';
+	text-transform: lowercase;
+}
+
+form .inputContainer:nth-child(5) {
+	margin-bottom: 2.5em;
+}
+
+.if {
+	display: flex;
+	justify-content: center;
+	font-size: 16px;
+	margin-top: 1.5em;
+	width: 100%;
+}
+
+.if p {
+	display: inline;
+	width: auto;
+}
+
+.if a {
+	margin-left: 0.5em;
+	color: var(--dark-blue);
+	text-decoration: none;
+}
+
+.if a:hover {
+	text-decoration: underline;
+}
+
+.wrongEmail,
+.successfulRegistration {
+	align-self: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.wrongEmail p {
+	margin: 1.5em 0;
+	font-size: 18px;
+	color: red;
+	font-weight: bold;
+	text-transform: uppercase;
+	letter-spacing: 0.11em;
+}
+
+.successfulRegistration p {
+	margin: 1.5em 0;
+	font-size: 18px;
+	color: green;
+	font-weight: bold;
+	text-transform: uppercase;
+	letter-spacing: 0.11em;
+}
+
+.validation-result {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.error-list {
+	list-style-position: inside;
+}
+
+.validation-error {
+	margin-bottom: 1em;
+	font-size: 18px;
+	color: red;
+	text-align: center;
+	max-width: 15em;
+	letter-spacing: 0.11em;
+}
+.validation-error:first-of-type {
+	margin-top: 1.5em;
+}
+
+.validation-error:last-of-type {
+	margin-bottom: 1.5em;
+}
+
+.empty-login {
+	margin: 1.5em 0;
+	font-size: 18px;
+	color: red;
+}
+
+/* edit.php */
+
+.buttons {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.edit-btn {
+	text-decoration: none;
+}
+
+#cancel {
+	background-color: var(--dark-red);
+	border: solid 2px var(--light-red);
+	margin-left: 0.3em;
+}
+
+#cancel:hover {
+	background-color: transparent;
+	color: var(--light-red);
+	transition: background-color ease 0.3s;
+}
+
+#confirm {
+	padding-left: 1.2em;
+	padding-right: 1.2em;
+	margin-right: 0.3em;
+}
+
+/* home page */
+
+.navbar {
+	width: 100vw;
+	background-color: var(--white);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0.7em 2em;
+	position: fixed;
+	top: 0;
+	z-index: 9999;
+	border-bottom-left-radius: 0.4em;
+	border-bottom-right-radius: 0.4em;
+
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+	border: solid 1px rgba(0, 0, 0, 0.18);
+}
+
+.logoHome {
+	font-family: 'Montserrat';
+	font-weight: bold;
+	text-transform: lowercase;
+	color: var(--dark-blue);
+	font-size: 18px;
+	letter-spacing: 0.14em;
+}
+
+a {
+	text-decoration: none;
+}
+
+.addNew {
+	display: flex;
+}
+
+.addBtn {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 13px;
+	padding: 1em;
+}
+
+.addBtn:first-of-type {
+	margin-right: 3em;
+}
+
+.addBtn i {
+	margin: 0;
+}
+
+#addNote {
+	background-color: var(--dark-blue);
+	border-color: var(--light-blue);
+}
+#addNote:hover {
+	background-color: transparent;
+	color: var(--light-blue);
+}
+
+#addList {
+	background-color: var(--dark-orange);
+	border-color: var(--light-orange);
+}
+
+#addList:hover {
+	background-color: transparent;
+	color: var(--light-orange);
+}
+
+#logout {
+	background-color: var(--dark-red);
+	border-color: var(--light-red);
+	font-size: 13px;
+	padding: 0.8em 1.3em;
+}
+
+#logout:hover {
+	background-color: transparent;
+	color: var(--light-red);
+}
+
+.mainPage {
+	padding: 2em;
+	display: grid;
+	height: 100%;
+	width: 100%;
+	grid-template-columns: 1fr 4fr;
+	grid-template-rows: 1fr;
+	column-gap: 2em;
+}
+
+.sidebar {
+	grid-column: 1/2;
+	grid-row: 1/2;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: start;
+}
+
+.halfSidebar {
+	display: flex;
+	flex-direction: column;
+	height: 50%;
+	width: 100%;
+	background-color: var(--transparent-white);
+	border-radius: 0.4em;
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+	border: solid 1px rgba(0, 0, 0, 0.18);
+}
+
+.usernameWrap {
+	display: flex;
+	height: 25%;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+	font-size: 20px;
+	text-transform: lowercase;
+	font-weight: bold;
+	letter-spacing: 0.1em;
+	color: white;
+}
+
+#username {
+	font-family: 'Montserrat';
+}
+
+.line {
+	white-space: pre-wrap;
+	background-color: white;
+	height: 2px;
+	width: 90%;
+	align-self: center;
+	margin-bottom: 0.7em;
+}
+
+.sidebarBtn {
+	background-color: transparent;
+	cursor: pointer;
+	width: 100%;
+	height: 100%;
+	border: none;
+	text-align: left;
+	font-family: 'Montserrat';
+	font-size: 18px;
+	letter-spacing: 0.05em;
+	padding: 0.5em;
+	border-radius: 0.3em;
+	transition: background-color ease 0.3s;
+}
+
+.sidebarBtn:hover {
+	background-color: white;
+	transition: background-color ease 0.3s;
+}
+
+.sidebar button {
+	display: flex;
+	align-items: center;
+}
+
+.div {
+	margin-right: 1em;
+	margin-left: 0.5em;
+	width: 10%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#myNotes:hover {
+	background-color: var(--dark-blue);
+	color: white;
+}
+
+#myTasks:hover {
+	background-color: var(--dark-orange);
+	color: white;
+}
+
+.halfSidebar form {
+	padding: 0.5em;
+	height: 25%;
+}
+
+/* notename style */
+
+.noteName,
+.listName {
+	font-size: 18px;
+	font-weight: bold;
+	font-family: 'Montserrat';
+}
+
+/* notecontent style  */
+
+.noteContent {
+	line-height: 160%;
+	font-family: 16px;
+	font-family: 'Montserrat';
+	text-align: justify;
+}
+
+/* mynotes */
+
+.notesBox {
+	width: 100%;
+}
+
+.note {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	background-color: var(--white);
+	padding: .8em;
+	
+	border-radius: 0.4em;
+	margin-bottom: 2em;
+	transition: background-color ease 0.3s;
+}
+
+.note:hover {
+	background-color: #e9e9e9;
+	transition: background-color ease 0.3s;
+}
+
+.note input {
+	display: none;
+}
+
+.noteFlex {
+	display: flex;
+	height: 100%;
+	width: 100%;
+}
+
+.colorMark {
+	white-space: pre-wrap;
+	height: 86px;
+	width: 7px;
+	background-color: var(--dark-blue);
+	border-radius: 0.3em;
+}
+
+.innerNoteWrap {
+	display: flex;
+	flex-direction: column;
+	margin-left: 0.7em;
+	width: 99%;
+}
+
+.smallWrap {
+	display: flex;
+	justify-content: space-between;
+	padding-bottom: 2px;
+}
+
+.note form {
+	display: inline-block;
+}
+
+.note:last-of-type {
+	margin-bottom: 0;
+}
+
+.noteDate {
+	align-self: end;
+	font-family: 'Montserrat';
+	font-size: 14px;
+	font-style: italic;
+	margin-top: 1em;
+}
+
+#moreIcon,
+#deleteIcon {
+	background-color: transparent;
+	justify-self: end;
+	padding: 0.3em;
+	cursor: pointer;
+	border: none;
+	font-size: 16px;
+}
+
+#moreIcon {
+	margin: 0 0.3em 0 0;
+}
+
+#moreIcon:hover {
+	color: var(--dark-blue);
+}
+
+#deleteIcon:hover {
+	color: var(--dark-red);
+}
+
+.contentBox {
+	background-color: var(--transparent-white);
+	grid-column: 2/3;
+	grid-row: 1/2;
+	border-radius: 0.4em;
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+	border: solid 1px rgba(0, 0, 0, 0.18);
+	overflow: hidden;
+	overflow-y: scroll;
+}
+
+.mainWrapper {
+	width: 100%;
+	height: 100%;
+	padding: 1.5em;
+}
+
+.startOption {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.startPageBtn {
+	display: inline-block;
+	margin: 0 0.5em !important;
+}
+
+#addNoteDis {
+	cursor: default;
+}
+
+#addNoteDis:hover {
+	background-color: var(--dark-blue);
+	color: white;
+}
+
+#addTaskDis {
+	background-color: var(--dark-orange);
+	border-color: var(--light-orange);
+	cursor: default;
+}
+
+#addTaskDis:hover {
+	background-color: var(--dark-orange);
+	color: white;
+}
+
+.wrapper:first-of-type {
+	margin-bottom: 2em;
+}
+
+.wrapper span {
+	font-family: 'Montserrat';
+	font-size: 30px;
+}
+
+/* add note */
+
+.noteCreate {
+	align-items: start;
+	height: 100%;
+	background-color: white;
+	border-radius: 0.3em;
+}
+
+.box {
+	width: 100%;
+	padding: 0 0.5em;
+}
+
+.box:nth-child(1) {
+	height: 15%;
+	display: flex;
+	align-items: end;
+}
+
+.box:nth-child(2) {
+	height: 77%;
+	padding-right: 0;
+}
+
+.box:nth-child(3) {
+	height: 8%;
+	display: flex;
+	align-items: center;
+	justify-content: end;
+	padding-right: 0.3em;
+}
+
+.confirm {
+	cursor: pointer;
+	background-color: transparent;
+	color: var(--green);
+	font-size: 25px;
+	padding: 0.3em;
+	border: none;
+	border-radius: 0.2em;
+}
+
+#nameIput {
+	height: 100%;
+}
+
+#noteInput {
+	resize: none;
+	height: 100%;
+}
+
+.hidden {
+	display: none;
+}
+
+/* note added */
+
+.flex {
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+#success {
+	text-transform: uppercase;
+	font-weight: bold;
+	font-size: 25px;
+	letter-spacing: 0.11em;
+	margin-bottom: 1em;
+}
+
+.next button {
+	background-color: #65e054;
+	background-color: var(--green);
+	border: solid 2px #8be87f;
+}
+
+.next button:hover {
+	background-color: transparent;
+	color: white;
+}
+
+.empty {
+	text-transform: uppercase;
+	font-weight: bold;
+	font-size: 25px;
+	letter-spacing: 0.11em;
+}
+
+/* show note */
+
+.notesWrapper {
+	background-color: var(--white);
+	border-radius: 0.3em;
+	width: 100%;
+	height: auto;
+	padding: 1em 1.5em 1.5em 1.5em;
+}
+
+.nameWrap {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 1em;
+}
+
+.formWrap form {
+	display: inline-block;
+}
+
+.formWrap form button {
+	padding: 0.3em;
+	background-color: transparent;
+	font-size: 16px;
+	border: none;
+	cursor: pointer;
+	margin-right: 0.3em;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.closeNote {
+	margin: 0 !important;
+}
+
+.closeNote:hover {
+	color: var(--dark-red);
+}
+
+.editNote:hover {
+	color: var(--dark-blue);
+}
+
+.date {
+	display: block;
+	text-align: right;
+	margin-top: 1.1em;
+}
+
+/* my tasklists */
+
+.colorMarkTask {
+	white-space: pre-wrap;
+	height: 86px;
+	width: 7px;
+	background-color: var(--dark-orange);
+	border-radius: 0.3em;
+}
+
+#moreIconList {
+	background-color: transparent;
+	justify-self: end;
+	padding: 0.3em;
+	cursor: pointer;
+	border: none;
+	font-size: 16px;
+	margin: 0 0.3em 0 0;
+}
+
+#moreIconList:hover {
+	color: var(--dark-orange) !important;
+}
+
+.smallWrap2 {
+	display: flex;
+	width: 100%;
+	justify-content: end;
+	padding-bottom: 2px;
+}

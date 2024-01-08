@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600&family=Hedvig+Letters+Serif:opsz@12..24&family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@400;700&display=swap');
+
+#bodyID {
+	display: block;
+	padding-top: 66px;
+}
+
+#nameInput {
+	font-weight: bold;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+#noteInput {
+	padding-top: 0;
+	padding-bottom: 0;
+	font-family: 'Montserrat';
+}
