@@ -62,7 +62,7 @@
             </form> 
             
             <form method="post" action="">
-               <button id='myTasks' class="sidebarBtn" name='myTasks'>
+               <button id='myTasks' class="sidebarBtn" name='myLists'>
                <div class="div"><i class="fa-solid fa-list"></i></div> My task lists
                </button>
             </form>
@@ -268,11 +268,11 @@
                <div class='flex noteFlex'>
                   <span id='success'>Task list added successfully!</span>
                   <form method='post' class='next'>
-                     <button class='btn' name='myTasks'>continue</button>
+                     <button class='btn' name='myLists'>continue</button>
                   </form>
                </div>";
 
-         }elseif (isset($_POST["myTasks"])){
+         }elseif (isset($_POST["myLists"])){
             $tasklists = mysqli_query($conn,"SELECT * FROM tasklists WHERE user_id='$user_id'") or die('Select Error');
             $userTasklists= mysqli_fetch_all($tasklists, MYSQLI_ASSOC);
 
@@ -323,7 +323,7 @@
             if($list){
                echo"
                <div class='flex noteFlex'>
-                  <span id='success'>Note deleted successfully</span>
+                  <span id='success'>Tasklist deleted successfully</span>
                   <form method='post' class='next'>
                      <button class='btn' name='myTasks'>continue</button>
                      <input class='hidden' name='listID' value='".  $listID . "'>
@@ -339,6 +339,7 @@
 
             $tasklistName = mysqli_query($conn,"SELECT tasklist_name FROM tasklists WHERE tasklist_id='$listID'") or die("Select Error");
             $resTaskListName = mysqli_fetch_array($tasklistName, MYSQLI_ASSOC);
+
             $data = mysqli_query($conn,"SELECT tasklist_date FROM tasklists WHERE tasklist_id='$listID'") or die("Select Error");
             $resDate = mysqli_fetch_array($data, MYSQLI_ASSOC);
             
@@ -363,18 +364,44 @@
                   </div>
                </div>";
 
-               echo "<form>";
+               echo "<div class='taskWrapper'>";
                if($resTasks){
                   foreach($resTasks as $resTask){
-                  echo "<div class='oneTask'>
-                  <input type='checkbox' id='taskCheckbox' name='task' ><label for='task'>". $resTask['content'] ."</label>
-                  </div>";
-               }}
-               echo "</form>";
+                     echo "
+                     <div class='oneTask'>
+                     <input type='checkbox' id='taskCheckbox' name='task' ><label for='task'>". $resTask['content'] ."</label>
+                     <form action='' method='post'>
+                              <button id='deleteIcon' name='deleteTask'><i class='fa-solid fa-trash-can'></i></button>
+                              <input class='hidden' name ='taskID' value='". $resTask['task_id'] ."'>
+                     </form>
+                     </div>";
+                  }
+               }
+               echo "</div>";
             echo "<span class='noteDate date'>". $dateshort ."</span>
             </div></div>  
             ";
 
+         }elseif (isset($_POST["deleteTask"])){
+            $taskID = $_POST["taskID"];
+
+            $listIDSelect = mysqli_query($conn,"SELECT tasklist_id FROM tasks WHERE task_id='$taskID'") or die("Error occured!");
+            
+            $listID = mysqli_fetch_array($listIDSelect, MYSQLI_ASSOC);
+
+            $deleteTask = mysqli_query($conn,"DELETE FROM tasks WHERE task_id='$taskID'") or die('Error occured!');
+            
+            if($deleteTask){
+               echo"
+               <div class='flex noteFlex'>
+                  <span id='success'>Task deleted successfully</span>
+                  <form method='post' class='next'>
+                     <button class='btn' name='moreList'>continue</button>
+                     <input class='hidden' name='listID' value='".  $listID['tasklist_id'] . "'>
+                  </form>
+               </div>
+               ";
+            }
          }else{
       
          ?>
