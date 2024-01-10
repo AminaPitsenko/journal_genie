@@ -242,6 +242,35 @@
 
          }elseif (isset($_POST["addList"])){
             
+         ?>
+
+         <div class="addListWrap">
+            <form class='listCreate' action="" method='post'>
+               <div class="box">
+                  <input autocomplete="off" type="text" id="nameInput" name="nameInput" placeholder="Task list's name" class='noteName'>
+               </div>
+               <div class="box">
+                  <button class='confirm' name='confirmList'><i class="fa-solid fa-check"></i></button>
+               </div>
+            </form>
+         </div>
+
+         <?php
+         }elseif (isset($_POST["confirmList"])){
+
+               $tasklist_name = $_POST['nameInput'];
+               $tasklist_date = date("y-m-d") ."  ". date("H:i:sa");
+               $user_id = $_SESSION['user_id'];
+
+               mysqli_query($conn,"INSERT INTO tasklists(tasklist_name, tasklist_date, user_id) VALUES ('$tasklist_name', '$tasklist_date', '$user_id')") or die('Error occured!');
+
+               echo"
+               <div class='flex noteFlex'>
+                  <span id='success'>Task list added successfully!</span>
+                  <form method='post' class='next'>
+                     <button class='btn' name='myTasks'>continue</button>
+                  </form>
+               </div>";
 
          }elseif (isset($_POST["myTasks"])){
             $tasklists = mysqli_query($conn,"SELECT * FROM tasklists WHERE user_id='$user_id'") or die('Select Error');
@@ -288,7 +317,7 @@
 
          }elseif (isset($_POST["deleteList"])){
             $listID = $_POST["listID"];
-            $list = mysqli_query($conn,"DELETE FROM tasklist WHERE tasklist_id='$listID'") or die('Error occured!');
+            $list = mysqli_query($conn,"DELETE FROM tasklists WHERE tasklist_id='$listID'") or die('Error occured!');
             $tasks = mysqli_query($conn,"DELETE FROM tasks WHERE tasklist_id='$listID'") or die('Error occured!');
 
             if($list){
@@ -296,8 +325,8 @@
                <div class='flex noteFlex'>
                   <span id='success'>Note deleted successfully</span>
                   <form method='post' class='next'>
-                     <button class='btn' name='myNotes'>continue</button>
-                     <input class='hidden' name='noteID' value='".  $noteID . "'>
+                     <button class='btn' name='myTasks'>continue</button>
+                     <input class='hidden' name='listID' value='".  $listID . "'>
                   </form>
                </div>
                ";
@@ -309,30 +338,42 @@
             $resTasks = mysqli_fetch_all($list, MYSQLI_ASSOC);
 
             $tasklistName = mysqli_query($conn,"SELECT tasklist_name FROM tasklists WHERE tasklist_id='$listID'") or die("Select Error");
+            $resTaskListName = mysqli_fetch_array($tasklistName, MYSQLI_ASSOC);
             $data = mysqli_query($conn,"SELECT tasklist_date FROM tasklists WHERE tasklist_id='$listID'") or die("Select Error");
-
-            if($resTasks){
-               $dateshort = substr($data , 0, 16);
+            $resDate = mysqli_fetch_array($data, MYSQLI_ASSOC);
+            
+            $dateshort = substr($resDate['tasklist_date'] , 0, 16);
 
             echo "
             <div class='notesWrapper'>
                <div class='nameWrap'>
-                  <span class='noteName'>". $tasklistName ."</span>
-                  <div class='formWrap'> 
+                  <span class='noteName'>". $resTaskListName['tasklist_name'] ."</span>
+                  <div class='formWrap'>
+                     <form action='' method='post'>
+                        <button name='addTask' class='editNote'><i class='fa-solid fa-plus'></i></button>
+                        <input class='hidden' name='listID' value='". $listID. "'>
+                     </form>
                      <form action='' method='post'>
                         <button name='editNote' class='editNote'><i class='fa-solid fa-pen-to-square'></i></button>
-                        <input class='hidden' name='noteID' value='". $listID. "'>
+                        <input class='hidden' name='listID' value='". $listID. "'>
                      </form>
                      <form action='' method='post'>
                         <button name='myLists' class='closeNote'><i class='fa-solid fa-xmark'></i></button>
                      </form>
                   </div>
-               </div>
-               <p class='noteContent'>". $resNote['content'] ."</p>
-               <span class='noteDate date'>". $dateshort ."</span>
-            </div></div>
+               </div>";
+
+               echo "<form>";
+               if($resTasks){
+                  foreach($resTasks as $resTask){
+                  echo "<div class='oneTask'>
+                  <input type='checkbox' id='taskCheckbox' name='task' ><label for='task'>". $resTask['content'] ."</label>
+                  </div>";
+               }}
+               echo "</form>";
+            echo "<span class='noteDate date'>". $dateshort ."</span>
+            </div></div>  
             ";
-            }
 
          }else{
       
