@@ -369,7 +369,7 @@
                   foreach($resTasks as $resTask){
                      echo "
                      <div class='oneTask'>
-                     <input type='checkbox' id='taskCheckbox' name='task' ><label for='task'>". $resTask['content'] ."</label>
+                     <input type='checkbox' id='taskCheckbox' name='task' ><span >". $resTask['content'] ."</span>
                      <form action='' method='post'>
                               <button id='deleteIcon' name='deleteTask'><i class='fa-solid fa-trash-can'></i></button>
                               <input class='hidden' name ='taskID' value='". $resTask['task_id'] ."'>
