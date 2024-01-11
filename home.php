@@ -88,31 +88,28 @@
                <textarea autocomplete="off" spellcheck="false" type="text" id='noteInput' name='noteInput' placeholder='Text...' class='noteContent'></textarea>
             </div>
             <div class="box">
-               <button class='confirm' name='confirmNote'><i class="fa-solid fa-check"></i></button>
+               <button class='confirm' name='myNotes'><i class="fa-solid fa-check"></i></button>
+               <input type="text" class="hidden" name='createNote' value='createNote'>
             </div>
          </form>  
-
+       
          <?php
-            }elseif (isset($_POST['confirmNote'])){
-               
+
+            }elseif (isset($_POST['myNotes'])){
+
+            if(array_key_exists('deleteNote', $_POST)){
+               $noteID = $_POST["noteID"];
+               $note = mysqli_query($conn,"DELETE FROM notes WHERE note_id='$noteID'") or die('Error occured!');
+            }
+
+            if(array_key_exists('createNote', $_POST)){
                $note_name = $_POST['nameInput'];
                $content = $_POST['noteInput'];
                $note_date = date("y-m-d") ."  ". date("H:i:sa");
                $user_id = $_SESSION['user_id'];
 
                mysqli_query($conn,"INSERT INTO notes(note_name, content, note_date, user_id) VALUES ('$note_name', '$content', '$note_date', '$user_id')") or die('Error occured!');
-
-               echo"
-               <div class='flex noteFlex'>
-                  <span id='success'>Note added successfully!</span>
-                  <form method='post' class='next'>
-                     <button class='btn' name='myNotes'>continue</button>
-                  </form>
-               </div>";
-            ?>
-               
-            <?php
-            }elseif (isset($_POST['myNotes'])){
+            }
             $notes = mysqli_query($conn,"SELECT * FROM notes WHERE user_id='$user_id'") or die('Select Error');
             $usersNotes= mysqli_fetch_all($notes, MYSQLI_ASSOC);
 
@@ -129,6 +126,7 @@
             foreach ($usersNotes as $userNote){
                $contentPreview = substr($userNote['content'] , 0, 120);
                $dateshort =substr($userNote['note_date'] , 0, 16);
+               
                echo "
                
                <div class='note'>
@@ -143,8 +141,9 @@
                               <input name='noteID' value='". $userNote['note_id'] . "'>
                            <form>
                            <form action='' method='post'>
-                              <button id='deleteIcon' name='delete'><i class='fa-solid fa-trash-can'></i></button>
+                              <button id='deleteIcon' name='myNotes'><i class='fa-solid fa-trash-can'></i></button>
                               <input name='noteID' value='". $userNote['note_id'] . "'>
+                              <input name='deleteNote' value='deleteNote'>
                            </form>
                         </div>
                         <p class='noteContent'>" . $contentPreview . "...</p>
@@ -157,24 +156,17 @@
 
             echo "</div>";
 
-         }elseif (isset($_POST["delete"])){
-            $noteID = $_POST["noteID"];
-            $note = mysqli_query($conn,"DELETE FROM notes WHERE note_id='$noteID'") or die('Error occured!');
-
-            if($note){
-               echo"
-               <div class='flex noteFlex'>
-                  <span id='success'>Note deleted successfully</span>
-                  <form method='post' class='next'>
-                     <button class='btn' name='myNotes'>continue</button>
-                     <input class='hidden' name='noteID' value='".  $noteID . "'>
-                  </form>
-               </div>
-               ";
-            }
-
          }elseif (isset($_POST["moreNote"])){  
                $noteID = $_POST["noteID"];
+
+               if(array_key_exists("confirm", $_POST)){
+                  $noteNameEdit = $_POST['noteNameEdit'];
+                  $noteEdit = $_POST['noteEdit'];
+                  $noteDate = date("y-m-d") ."  ". date("H:i:sa");
+   
+                  $edit = mysqli_query($conn,"UPDATE notes SET note_name='$noteNameEdit', content='$noteEdit', note_date='$noteDate' WHERE note_id='$noteID'") or die(mysqli_error($conn));
+               }
+
                $note = mysqli_query($conn,"SELECT * FROM notes WHERE note_id='$noteID'") or die("Select Error");
                $resNote = mysqli_fetch_array($note, MYSQLI_ASSOC);
 
@@ -201,7 +193,8 @@
                ";
             }
          }elseif (isset($_POST["editNote"])){
-            $noteID = $_POST["noteID"];
+            $noteID = $_POST['noteID'];
+
             $note = mysqli_query($conn,"SELECT * FROM notes WHERE note_id='$noteID'") or die("Select Error");
             $resNote = mysqli_fetch_array($note, MYSQLI_ASSOC);
          ?>
@@ -214,30 +207,13 @@
                <textarea autocomplete="off" spellcheck="false" type="text" id='noteInput' name='noteEdit' placeholder='Text...' class='noteContent'><?php echo $resNote['content'] ?></textarea>
             </div>
             <div class="box">
-               <button class='confirm' name='confirmEditNote'><i class="fa-solid fa-check"></i></button>
+               <button class='confirm' name='moreNote'><i class="fa-solid fa-check"></i></button>
                <input class='hidden' name='noteID' value='<?php echo $noteID; ?>'>
+               <input class='hidden' name='confirm' value='cionfrm'>
             </div>
          </form>
 
          <?php
-         }elseif (isset($_POST['confirmEditNote'])){
-            $noteNameEdit = $_POST['noteNameEdit'];
-            $noteEdit = $_POST['noteEdit'];
-            $noteID = $_POST['noteID'];
-            $noteDate = date("y-m-d") ."  ". date("H:i:sa");
-
-            $edit = mysqli_query($conn,"UPDATE notes SET note_name='$noteNameEdit', content='$noteEdit', note_date='$noteDate' WHERE note_id='$noteID'") or die(mysqli_error($conn));
-
-            if($edit){
-               echo "
-               <div class='flex noteFlex'>
-                  <span id='success'>Changes saved!</span>
-                  <form method='post' class='next'>
-                     <button class='btn' name='moreNote'>continue</button>
-                     <input class='hidden' name='noteID' value='".  $noteID . "'>
-                  </form>
-               </div>";
-            }
          // TASK LIST PART
 
          }elseif (isset($_POST["addList"])){
@@ -250,29 +226,31 @@
                   <input autocomplete="off" type="text" id="nameInput" name="nameInput" placeholder="Task list's name" class='noteName'>
                </div>
                <div class="box">
-                  <button class='confirm' name='confirmList'><i class="fa-solid fa-check"></i></button>
+                  <button class='confirm' name='myLists'><i class="fa-solid fa-check"></i></button>
+                  <input type="text" class="hidden" name='createList' value="createList">
                </div>
             </form>
          </div>
 
          <?php
-         }elseif (isset($_POST["confirmList"])){
 
+         }elseif (isset($_POST["myLists"])){
+
+            if(array_key_exists("deleteList", $_POST)){
+               $listID = $_POST["listID"];
+               $list = mysqli_query($conn,"DELETE FROM tasklists WHERE tasklist_id='$listID'") or die('Error occured!');
+               $tasks = mysqli_query($conn,"DELETE FROM tasks WHERE tasklist_id='$listID'") or die('Error occured!');
+            }
+
+            if(array_key_exists("createList", $_POST)){
+               
                $tasklist_name = $_POST['nameInput'];
                $tasklist_date = date("y-m-d") ."  ". date("H:i:sa");
                $user_id = $_SESSION['user_id'];
 
                mysqli_query($conn,"INSERT INTO tasklists(tasklist_name, tasklist_date, user_id) VALUES ('$tasklist_name', '$tasklist_date', '$user_id')") or die('Error occured!');
+            }
 
-               echo"
-               <div class='flex noteFlex'>
-                  <span id='success'>Task list added successfully!</span>
-                  <form method='post' class='next'>
-                     <button class='btn' name='myLists'>continue</button>
-                  </form>
-               </div>";
-
-         }elseif (isset($_POST["myLists"])){
             $tasklists = mysqli_query($conn,"SELECT * FROM tasklists WHERE user_id='$user_id'") or die('Select Error');
             $userTasklists= mysqli_fetch_all($tasklists, MYSQLI_ASSOC);
 
@@ -298,11 +276,12 @@
                            <form method='post'>
                               <button id='moreIconList' name='moreList'><i class='fa-solid fa-angle-right'></i>
                               </button>
-                              <input name='listID' value='". $userTasklist['tasklist_id'] . "'>
+                              <input class='hidden' name='listID' value='". $userTasklist['tasklist_id'] . "'>
                            <form>
                            <form action='' method='post'>
-                              <button id='deleteIcon' name='deleteList'><i class='fa-solid fa-trash-can'></i></button>
-                              <input name='listID' value='". $userTasklist['tasklist_id'] . "'>
+                              <button id='deleteIcon' name='myLists'><i class='fa-solid fa-trash-can'></i></button>
+                              <input class='hidden' name='listID' value='". $userTasklist['tasklist_id'] . "'>
+                              <input name='deleteList' class='hidden' value='deleteList'>
                            </form>
                         </div>
                         <span class='listName'>". $userTasklist['tasklist_name'] . "</span>
@@ -315,25 +294,37 @@
 
             echo "</div>";
 
-         }elseif (isset($_POST["deleteList"])){
-            $listID = $_POST["listID"];
-            $list = mysqli_query($conn,"DELETE FROM tasklists WHERE tasklist_id='$listID'") or die('Error occured!');
-            $tasks = mysqli_query($conn,"DELETE FROM tasks WHERE tasklist_id='$listID'") or die('Error occured!');
-
-            if($list){
-               echo"
-               <div class='flex noteFlex'>
-                  <span id='success'>Tasklist deleted successfully</span>
-                  <form method='post' class='next'>
-                     <button class='btn' name='myTasks'>continue</button>
-                     <input class='hidden' name='listID' value='".  $listID . "'>
-                  </form>
-               </div>
-               ";
-            }
-         
          }elseif (isset($_POST["moreList"])){
-            $listID = $_POST["listID"];
+            $listID='';
+
+            if(array_key_exists('confirmEdit', $_POST)){
+               $taskID = $_POST["task_id"];
+               $listID = $_POST["listID"];
+
+               $tasklistName = $_POST['tasklistName'];
+               $taskContent = $_POST['task'];
+               $listDate = date("y-m-d") ."  ". date("H:i:sa");
+   
+               $edit = mysqli_query($conn,"UPDATE tasklists SET tasklist_name='$tasklistName', tasklist_date='$listDate' WHERE tasklist_id='$listID'") or die(mysqli_error($conn));
+
+               // $edit2 = mysqli_query($conn,"UPDATE tasks SET tasklist_name='$tasklistName', tasklist_date='$listDate' WHERE tasklist_id='$listID'") or die(mysqli_error($conn));
+            }
+
+            if (array_key_exists("taskID", $_POST)){
+               $taskID = $_POST["taskID"];
+
+               $listIDSelect = mysqli_query($conn,"SELECT tasklist_id FROM tasks WHERE task_id='$taskID'") or die("Error occured!");
+               
+               $listIDArray = mysqli_fetch_array($listIDSelect, MYSQLI_ASSOC);
+
+               $listID = $listIDArray['tasklist_id'];
+   
+               $deleteTask = mysqli_query($conn,"DELETE FROM tasks WHERE task_id='$taskID'") or die('Error occured!');
+            }
+            else{
+               $listID = $_POST["listID"];
+            }
+
             $list = mysqli_query($conn,"SELECT * FROM tasks WHERE tasklist_id='$listID'") or die("Select Error");
             $resTasks = mysqli_fetch_all($list, MYSQLI_ASSOC);
 
@@ -355,7 +346,7 @@
                         <input class='hidden' name='listID' value='". $listID. "'>
                      </form>
                      <form action='' method='post'>
-                        <button name='editNote' class='editNote'><i class='fa-solid fa-pen-to-square'></i></button>
+                        <button name='editList' class='editNote'><i class='fa-solid fa-pen-to-square'></i></button>
                         <input class='hidden' name='listID' value='". $listID. "'>
                      </form>
                      <form action='' method='post'>
@@ -371,7 +362,7 @@
                      <div class='oneTask'>
                      <input type='checkbox' id='taskCheckbox' name='task' ><span >". $resTask['content'] ."</span>
                      <form action='' method='post'>
-                              <button id='deleteIcon' name='deleteTask'><i class='fa-solid fa-trash-can'></i></button>
+                              <button id='deleteIcon' name='moreList'><i class='fa-solid fa-trash-can'></i></button>
                               <input class='hidden' name ='taskID' value='". $resTask['task_id'] ."'>
                      </form>
                      </div>";
@@ -382,26 +373,39 @@
             </div></div>  
             ";
 
-         }elseif (isset($_POST["deleteTask"])){
-            $taskID = $_POST["taskID"];
+         }elseif(isset($_POST["editList"])){
+            $listID = $_POST["listID"];
 
-            $listIDSelect = mysqli_query($conn,"SELECT tasklist_id FROM tasks WHERE task_id='$taskID'") or die("Error occured!");
-            
-            $listID = mysqli_fetch_array($listIDSelect, MYSQLI_ASSOC);
+            $list = mysqli_query($conn,"SELECT * FROM tasks WHERE tasklist_id='$listID'") or die("Select Error");
+            $resTasks = mysqli_fetch_all($list, MYSQLI_ASSOC);
 
-            $deleteTask = mysqli_query($conn,"DELETE FROM tasks WHERE task_id='$taskID'") or die('Error occured!');
-            
-            if($deleteTask){
-               echo"
-               <div class='flex noteFlex'>
-                  <span id='success'>Task deleted successfully</span>
-                  <form method='post' class='next'>
-                     <button class='btn' name='moreList'>continue</button>
-                     <input class='hidden' name='listID' value='".  $listID['tasklist_id'] . "'>
-                  </form>
+            $tasklistName = mysqli_query($conn,"SELECT tasklist_name FROM tasklists WHERE tasklist_id='$listID'") or die("Select Error");
+            $resTaskListName = mysqli_fetch_array($tasklistName, MYSQLI_ASSOC);
+
+            echo "
+            <form method='post' class='notesWrapper'>
+               <div class='nameWrap'>
+                  <input class='noteName' name='tasklistName' value='". $resTaskListName['tasklist_name'] ."'>
                </div>
+               <div class='taskWrapper'>
                ";
-            }
+               if($resTasks){
+                  foreach($resTasks as $resTask){
+                     echo "
+                     <div class='oneTask'>
+                        <input type='checkbox' id='taskCheckbox' name='task'><textarea >". $resTask['content'] ."</textarea>
+                        <input class='hidden' name ='task_id' value='". $resTask['task_id'] ."'>
+                     </div>";
+                  }
+               }
+            echo 
+               "</div>
+               <div class='confirmBtn'>
+                  <button class='confirm' name='moreList'><i class='fa-solid fa-check'></i></button>
+                  <input class='hidden' name ='listID' value='". $listID."'>
+                  <input class='hidden' name ='confirmEdit' value='confirmEdit'>
+               </div>
+            </form>";
          }else{
       
          ?>
