@@ -464,6 +464,23 @@
                </div>
             </div>
          </div>
+
+         ?>
+
+         <?php
+         }else{
+            echo "<div class='mainWrapper startOption'>
+            <div class='startWrapper'>
+               <div class='wrapper'>
+                  <span>Click <button disabled class='addBtn btn startPageBtn' id='addNoteDis'><i class='fa-solid fa-plus'></i></button> to create new note</span>
+               </div>
+               <div class='wrapper'>
+                  <span>Click <button disabled class='addBtn btn startPageBtn' id='addTaskDis'><i class='fa-solid fa-plus'></i></button> to create new task list</span>
+               </div>
+            </div>
+         </div>";
+         
+         ?>
          <?php }?>
          </div>     
       </div>

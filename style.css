@@ -733,11 +733,12 @@ a {
 	height: 15%;
 	display: flex;
 	align-items: end;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
 }
 
 .box:nth-child(2) {
 	height: 77%;
-	padding-right: 0;
 }
 
 .box:nth-child(3) {
@@ -746,6 +747,12 @@ a {
 	align-items: center;
 	justify-content: end;
 	padding-right: 0.3em;
+}
+
+.box input,
+.box textarea {
+	background-color: #dedede;
+	border-radius: .3em;
 }
 
 .confirm {
@@ -962,6 +969,7 @@ a {
 .oneTask p {
 	width: 85%;
 	display: block;
+	font-family: 'Montserrat';
 }
 
 .oneTask form {
@@ -981,7 +989,7 @@ a {
 }
 
 #addTaskForm textarea {
-	font-size: 14px;
+	font-size: 16px;
 	width: 80%;
 	resize: none;
 	padding-left: 0;
