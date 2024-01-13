@@ -41,6 +41,22 @@
 	--green: #45cf32;
 }
 
+textarea::-webkit-scrollbar {
+	width: 0.2em;
+}
+
+textarea::-webkit-scrollbar-track {
+	background-color: transparent;
+}
+
+textarea::-webkit-scrollbar-thumb {
+	background-color: transparent;
+}
+
+textarea::-webkit-scrollbar-thumb:hover {
+	background-color: transparent;
+}
+
 body {
 	display: flex;
 	align-items: center;
@@ -827,6 +843,14 @@ a {
 }
 
 .closeNote {
+	padding: 0.3em;
+	background-color: transparent;
+	font-size: 18px;
+	border: none;
+	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	margin: 0 !important;
 }
 
@@ -925,16 +949,52 @@ a {
 	box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.15);
 }
 
+.oneTask textarea {
+	resize: none;
+}
+
 #taskCheckbox {
 	display: inline-block;
 	width: auto;
 	margin-right: 1em;
 }
 
-.oneTask span {
+.oneTask p {
 	width: 85%;
+	display: block;
 }
 
 .oneTask form {
 	width: 10%;
+}
+
+#addTaskForm {
+	display: flex;
+	flex-direction: row;
+	width: 90%;
+}
+
+#addTaskForm textarea,
+.confirmCustom,
+#addTaskForm #taskCheckbox {
+	display: inline-block;
+}
+
+#addTaskForm textarea {
+	font-size: 14px;
+	width: 80%;
+	resize: none;
+	padding-left: 0;
+	padding-right: 0.2em;
+}
+
+.confirmCustom {
+	font-size: 20px;
+}
+
+.discardAdding .closeNote {
+	font-size: 16px;
+}
+.discardAdding {
+	width: min-content;
 }

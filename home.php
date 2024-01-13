@@ -90,6 +90,7 @@
             <div class="box">
                <button class='confirm' name='myNotes'><i class="fa-solid fa-check"></i></button>
                <input type="text" class="hidden" name='createNote' value='createNote'>
+               <button name='startPage' class='closeNote'><i class='fa-solid fa-xmark'></i></button>
             </div>
          </form>  
        
@@ -228,6 +229,7 @@
                <div class="box">
                   <button class='confirm' name='myLists'><i class="fa-solid fa-check"></i></button>
                   <input type="text" class="hidden" name='createList' value="createList">
+                  <button name='startPage' class='closeNote'><i class='fa-solid fa-xmark'></i></button>
                </div>
             </form>
          </div>
@@ -295,19 +297,39 @@
             echo "</div>";
 
          }elseif (isset($_POST["moreList"])){
+            if(array_key_exists("confirmTask", $_POST)){
+               $listID = $_POST["listID"];
+               $listDate = date("y-m-d") ."  ". date("H:i:sa");
+               $taskContent = $_POST["addTaskContent"];
+
+               $add = mysqli_query($conn,"INSERT INTO tasks (content, tasklist_id) VALUES ('$taskContent', '$listID')") or die("Error occured");
+
+               $time = mysqli_query($conn,"UPDATE tasklists SET tasklist_date='$listDate' WHERE tasklist_id='$listID'") or die(mysqli_error($conn));
+            }
+
             $listID='';
 
             if(array_key_exists('confirmEdit', $_POST)){
-               $taskID = $_POST["task_id"];
+               //$taskID = $_POST["task_id"];
+
                $listID = $_POST["listID"];
 
                $tasklistName = $_POST['tasklistName'];
-               $taskContent = $_POST['task'];
                $listDate = date("y-m-d") ."  ". date("H:i:sa");
    
-               $edit = mysqli_query($conn,"UPDATE tasklists SET tasklist_name='$tasklistName', tasklist_date='$listDate' WHERE tasklist_id='$listID'") or die(mysqli_error($conn));
+               $x=0;
+               while(true){
+                  if(array_key_exists("task_id$x", $_POST)){
+                     $content = $_POST["taskContent$x"];
+                     $id = $_POST["task_id$x"];
+                     $edit2 = mysqli_query($conn,"UPDATE tasks SET content='$content' WHERE task_id='$id'") or die(mysqli_error($conn));
+                  }else{
+                     break;
+                  }
+                  $x++;
+               }
 
-               // $edit2 = mysqli_query($conn,"UPDATE tasks SET tasklist_name='$tasklistName', tasklist_date='$listDate' WHERE tasklist_id='$listID'") or die(mysqli_error($conn));
+               $edit = mysqli_query($conn,"UPDATE tasklists SET tasklist_name='$tasklistName', tasklist_date='$listDate' WHERE tasklist_id='$listID'") or die(mysqli_error($conn));
             }
 
             if (array_key_exists("taskID", $_POST)){
@@ -342,8 +364,9 @@
                   <span class='noteName'>". $resTaskListName['tasklist_name'] ."</span>
                   <div class='formWrap'>
                      <form action='' method='post'>
-                        <button name='addTask' class='editNote'><i class='fa-solid fa-plus'></i></button>
+                        <button name='moreList' class='editNote'><i class='fa-solid fa-plus'></i></button>
                         <input class='hidden' name='listID' value='". $listID. "'>
+                        <input class='hidden' name='addTask' value='addTask'>
                      </form>
                      <form action='' method='post'>
                         <button name='editList' class='editNote'><i class='fa-solid fa-pen-to-square'></i></button>
@@ -360,18 +383,38 @@
                   foreach($resTasks as $resTask){
                      echo "
                      <div class='oneTask'>
-                     <input type='checkbox' id='taskCheckbox' name='task' ><span >". $resTask['content'] ."</span>
-                     <form action='' method='post'>
-                              <button id='deleteIcon' name='moreList'><i class='fa-solid fa-trash-can'></i></button>
-                              <input class='hidden' name ='taskID' value='". $resTask['task_id'] ."'>
-                     </form>
+                        <input type='checkbox' id='taskCheckbox' name='task' ><p >". $resTask['content'] ."</p>
+                        <form action='' method='post'>
+                                 <button id='deleteIcon' name='moreList'><i class='fa-solid fa-trash-can'></i></button>
+                                 <input class='hidden' name ='taskID' value='". $resTask['task_id'] ."'>
+                        </form>
                      </div>";
                   }
                }
-               echo "</div>";
+               
+
+               if(array_key_exists("addTask", $_POST)){
+                  echo "
+                  <div class='oneTask'>
+                     
+                     <form method='post' id='addTaskForm'><input type='checkbox' id='taskCheckbox' name='task' >
+                        <textarea rows='1' autocomplete='off' spellcheck='false' name='addTaskContent' class='addTask'></textarea>
+                        <button class='confirm confirmCustom' name='moreList'><i class='fa-solid fa-check'></i></button>
+                        <input class='hidden' name ='listID' value='". $listID ."'>
+                        <input class='hidden' name ='confirmTask' value='confirmTask'>
+                     </form>
+                     <form method='post' class='discardAdding'>
+                        <button name='moreList' class='closeNote'><i class='fa-solid fa-xmark'></i></button>
+                        <input class='hidden' name='listID' value='". $listID. "'>
+                     </form>
+                  </div>";
+               }
+            echo "</div>";
             echo "<span class='noteDate date'>". $dateshort ."</span>
             </div></div>  
             ";
+
+       
 
          }elseif(isset($_POST["editList"])){
             $listID = $_POST["listID"];
@@ -390,12 +433,14 @@
                <div class='taskWrapper'>
                ";
                if($resTasks){
+                  $x=0;
                   foreach($resTasks as $resTask){
                      echo "
                      <div class='oneTask'>
-                        <input type='checkbox' id='taskCheckbox' name='task'><textarea >". $resTask['content'] ."</textarea>
-                        <input class='hidden' name ='task_id' value='". $resTask['task_id'] ."'>
+                        <input type='checkbox' id='taskCheckbox' name='task'><textarea rows='1' name='taskContent".$x."'>". $resTask['content'] ."</textarea>
+                        <input class='hidden' name ='task_id".$x."' value='". $resTask['task_id'] ."'>
                      </div>";
+                     $x++;
                   }
                }
             echo 
@@ -406,7 +451,7 @@
                   <input class='hidden' name ='confirmEdit' value='confirmEdit'>
                </div>
             </form>";
-         }else{
+         }elseif(isset($_POST["startPage"])){
       
          ?>
          <div class="mainWrapper startOption">
