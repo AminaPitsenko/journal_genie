@@ -465,7 +465,6 @@
             </div>
          </div>
 
-         ?>
 
          <?php
          }else{
