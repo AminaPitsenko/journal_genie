@@ -338,13 +338,27 @@
                $listIDSelect = mysqli_query($conn,"SELECT tasklist_id FROM tasks WHERE task_id='$taskID'") or die("Error occured!");
                
                $listIDArray = mysqli_fetch_array($listIDSelect, MYSQLI_ASSOC);
-
+               
                $listID = $listIDArray['tasklist_id'];
    
                $deleteTask = mysqli_query($conn,"DELETE FROM tasks WHERE task_id='$taskID'") or die('Error occured!');
             }
             else{
                $listID = $_POST["listID"];
+            }
+
+            if(array_key_exists('checked', $_POST)){
+               $taskID = $_POST['task_id'];
+               $sql = mysqli_query($conn,"SELECT if_checked FROM tasks WHERE task_id='$taskID'") or die("Select Error");
+
+               $if_checked = mysqli_fetch_array($sql, MYSQLI_ASSOC);
+               if($if_checked['if_checked'] == 1){
+                  $edit = mysqli_query($conn,"UPDATE tasks SET if_checked='0' WHERE task_id='$taskID'") or die("Select Error");
+               }else{
+                  $true = 1;
+                  $checked = mysqli_query($conn, "UPDATE tasks SET if_checked='$true' WHERE task_id='$taskID'");
+               }
+               
             }
 
             $list = mysqli_query($conn,"SELECT * FROM tasks WHERE tasklist_id='$listID'") or die("Select Error");
@@ -381,9 +395,27 @@
                echo "<div class='taskWrapper'>";
                if($resTasks){
                   foreach($resTasks as $resTask){
+                     $id = $resTask['task_id'];
+                     $sql = mysqli_query($conn,"SELECT if_checked FROM tasks WHERE task_id='$id'") or die("Select Error");
+                     $if_checked = mysqli_fetch_array($sql, MYSQLI_ASSOC);
+
                      echo "
                      <div class='oneTask'>
-                        <input type='checkbox' id='taskCheckbox' name='task' ><p >". $resTask['content'] ."</p>
+                        <form action='' method='post' class='marginCheckbox'>
+                        ";
+                        if($if_checked['if_checked'] == 1){
+                           echo"<button id='checkedBtn' name='moreList'><i class='fa-solid fa-check'></i></button>";
+                        }
+                        else{
+                           echo"
+                           <button id='checkboxBtn' name='moreList'> </i></button>";
+                        }
+                        echo"
+                           <input class='hidden' name='task_id' value='". $resTask['task_id'] ."'>
+                           <input class='hidden' name='listID' value='". $resTask['tasklist_id'] ."'>
+                           <input class='hidden' name ='checked' value='checked'>
+                        </form>
+                        <p >". $resTask['content'] ."</p>
                         <form action='' method='post'>
                                  <button id='deleteIcon' name='moreList'><i class='fa-solid fa-trash-can'></i></button>
                                  <input class='hidden' name ='taskID' value='". $resTask['task_id'] ."'>
@@ -397,7 +429,10 @@
                   echo "
                   <div class='oneTask'>
                      
-                     <form method='post' id='addTaskForm'><input type='checkbox' id='taskCheckbox' name='task' >
+                     <form method='post' id='addTaskForm'>
+                        <div class='wrapperCheckbox'>
+                           <button id='checkboxBtn' name='moreList'> </i></button>
+                        </div>
                         <textarea rows='1' autocomplete='off' spellcheck='false' name='addTaskContent' class='addTask'></textarea>
                         <button class='confirm confirmCustom' name='moreList'><i class='fa-solid fa-check'></i></button>
                         <input class='hidden' name ='listID' value='". $listID ."'>
@@ -435,9 +470,12 @@
                if($resTasks){
                   $x=0;
                   foreach($resTasks as $resTask){
+                     $id = $resTask['task_id'];
+                     $sql = mysqli_query($conn,"SELECT if_checked FROM tasks WHERE task_id='$id'") or die("Select Error");
+                     $if_checked = mysqli_fetch_array($sql, MYSQLI_ASSOC);
                      echo "
                      <div class='oneTask'>
-                        <input type='checkbox' id='taskCheckbox' name='task'><textarea rows='1' name='taskContent".$x."'>". $resTask['content'] ."</textarea>
+                        <textarea rows='1' name='taskContent".$x."'>". $resTask['content'] ."</textarea>
                         <input class='hidden' name ='task_id".$x."' value='". $resTask['task_id'] ."'>
                      </div>";
                      $x++;

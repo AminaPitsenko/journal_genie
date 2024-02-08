@@ -961,12 +961,24 @@ a {
 	resize: none;
 }
 
-#taskCheckbox {
-	display: inline-block;
-	width: auto;
-	margin-right: 1em;
-	height: 1em;
-	width: 1em;
+#checkedBtn {
+	width: 18px;
+	height: 18px;
+	cursor: pointer;
+	border: solid 1px darkgreen;
+	border-radius: 0.3em;
+	color: white;
+	font-size: 10px;
+	background-color: var(--green);
+}
+
+#checkboxBtn {
+	white-space: pre-wrap;
+	width: 18px;
+	height: 18px;
+	border: solid 1px darkgreen;
+	border-radius: 0.3em;
+	background-color: transparent;
 }
 
 .oneTask p {
@@ -991,6 +1003,10 @@ a {
 	display: inline-block;
 }
 
+.addTask {
+	width: 90%;
+}
+
 #addTaskForm textarea {
 	font-size: 16px;
 	width: 80%;
@@ -1001,6 +1017,7 @@ a {
 
 .confirmCustom {
 	font-size: 20px;
+	width: 5%;
 }
 
 .discardAdding .closeNote {
@@ -1008,4 +1025,13 @@ a {
 }
 .discardAdding {
 	width: min-content;
+}
+
+.wrapperCheckbox {
+	margin-left: 6px;
+	margin-right: 14px;
+}
+
+.marginCheckbox {
+	margin-right: 10px;
 }
